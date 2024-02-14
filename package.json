@@ -1,5 +1,5 @@
 {
-  "name": "fontfaceobserver",
+  "name": "@alloc/fontfaceobserver-es",
   "version": "2.3.0",
   "description": "Detect if web fonts are available",
   "directories": {
@@ -13,7 +13,8 @@
     "url": "https://github.com/bramstein/fontfaceobserver/issues"
   },
   "homepage": "https://fontfaceobserver.com/",
-  "main": "fontfaceobserver.standalone.js",
+  "main": "dist/fontfaceobserver.mjs",
+  "types": "fontfaceobserver.d.mts",
   "keywords": [
     "fontloader",
     "fonts",
@@ -32,17 +33,13 @@
   "author": "Bram Stein <b.l.stein@gmail.com> (http://www.bramstein.com/)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "closure-dom": "=0.2.6",
-    "google-closure-compiler": "=v20220502",
-    "grunt": "^1.0.3",
-    "grunt-contrib-clean": "^2.0.1",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-jshint": "^3.2.0",
-    "grunt-exec": "~1.0.0",
     "mocha": "^10.0.0",
     "mocha-headless-chrome": "^4.0.0",
+    "prettier": "^3.2.5",
     "promis": "=1.1.4",
     "sinon": "^14.0.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
     "unexpected": "^13.0.0"
   },
   "scripts": {

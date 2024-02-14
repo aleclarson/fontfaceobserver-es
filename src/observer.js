@@ -1,22 +1,7 @@
-goog.provide('fontface.Observer');
+import { Ruler } from './ruler';
 
-goog.require('fontface.Ruler');
-goog.require('dom');
-
-goog.scope(function () {
-  var Ruler = fontface.Ruler;
-
-  /**
-   * @constructor
-   *
-   * @param {string} family
-   * @param {fontface.Descriptors=} opt_descriptors
-   * @param {Window=} opt_context
-   */
-  fontface.Observer = function (family, opt_descriptors, opt_context) {
-    var descriptors = opt_descriptors || {};
-    var context = opt_context || window;
-
+export class FontFaceObserver {
+  constructor(family, descriptors = {}, context = window) {
     /**
      * @type {string}
      */
@@ -41,46 +26,44 @@ goog.scope(function () {
      * @type {Window}
      */
     this['context'] = context;
-  };
-
-  var Observer = fontface.Observer;
+  }
 
   /**
    * @type {null|boolean}
    */
-  Observer.HAS_WEBKIT_FALLBACK_BUG = null;
+  static HAS_WEBKIT_FALLBACK_BUG = null;
 
   /**
    * @type {null|boolean}
    */
-  Observer.HAS_SAFARI_10_BUG = null;
+  static HAS_SAFARI_10_BUG = null;
 
   /**
    * @type {null|boolean}
    */
-  Observer.SUPPORTS_STRETCH = null;
+  static SUPPORTS_STRETCH = null;
 
   /**
    * @type {null|boolean}
    */
-  Observer.SUPPORTS_NATIVE_FONT_LOADING = null;
+  static SUPPORTS_NATIVE_FONT_LOADING = null;
 
   /**
    * @type {number}
    */
-  Observer.DEFAULT_TIMEOUT = 3000;
+  static DEFAULT_TIMEOUT = 3000;
 
   /**
    * @return {string}
    */
-  Observer.getUserAgent = function () {
+  static getUserAgent = function () {
     return window.navigator.userAgent;
   };
 
   /**
    * @return {string}
    */
-  Observer.getNavigatorVendor = function () {
+  static getNavigatorVendor = function () {
     return window.navigator.vendor;
   };
 
@@ -90,16 +73,18 @@ goog.scope(function () {
    *
    * @return {boolean}
    */
-  Observer.hasWebKitFallbackBug = function () {
-    if (Observer.HAS_WEBKIT_FALLBACK_BUG === null) {
-      var match = /AppleWebKit\/([0-9]+)(?:\.([0-9]+))/.exec(Observer.getUserAgent());
+  static hasWebKitFallbackBug = function () {
+    if (FontFaceObserver.HAS_WEBKIT_FALLBACK_BUG === null) {
+      var match = /AppleWebKit\/([0-9]+)(?:\.([0-9]+))/.exec(
+        FontFaceObserver.getUserAgent(),
+      );
 
-      Observer.HAS_WEBKIT_FALLBACK_BUG = !!match &&
-                                          (parseInt(match[1], 10) < 536 ||
-                                           (parseInt(match[1], 10) === 536 &&
-                                            parseInt(match[2], 10) <= 11));
+      FontFaceObserver.HAS_WEBKIT_FALLBACK_BUG =
+        !!match &&
+        (parseInt(match[1], 10) < 536 ||
+          (parseInt(match[1], 10) === 536 && parseInt(match[2], 10) <= 11));
     }
-    return Observer.HAS_WEBKIT_FALLBACK_BUG;
+    return FontFaceObserver.HAS_WEBKIT_FALLBACK_BUG;
   };
 
   /**
@@ -119,17 +104,23 @@ goog.scope(function () {
    *
    * @return {boolean}
    */
-  Observer.hasSafari10Bug = function (context) {
-    if (Observer.HAS_SAFARI_10_BUG === null) {
-      if (Observer.supportsNativeFontLoading(context) && /Apple/.test(Observer.getNavigatorVendor())) {
-        var match = /AppleWebKit\/([0-9]+)(?:\.([0-9]+))(?:\.([0-9]+))/.exec(Observer.getUserAgent());
+  static hasSafari10Bug = function (context) {
+    if (FontFaceObserver.HAS_SAFARI_10_BUG === null) {
+      if (
+        FontFaceObserver.supportsNativeFontLoading(context) &&
+        /Apple/.test(FontFaceObserver.getNavigatorVendor())
+      ) {
+        var match = /AppleWebKit\/([0-9]+)(?:\.([0-9]+))(?:\.([0-9]+))/.exec(
+          FontFaceObserver.getUserAgent(),
+        );
 
-        Observer.HAS_SAFARI_10_BUG = !!match && parseInt(match[1], 10) < 603;
+        FontFaceObserver.HAS_SAFARI_10_BUG =
+          !!match && parseInt(match[1], 10) < 603;
       } else {
-        Observer.HAS_SAFARI_10_BUG = false;
+        FontFaceObserver.HAS_SAFARI_10_BUG = false;
       }
     }
-    return Observer.HAS_SAFARI_10_BUG;
+    return FontFaceObserver.HAS_SAFARI_10_BUG;
   };
 
   /**
@@ -138,11 +129,12 @@ goog.scope(function () {
    *
    * @return {boolean}
    */
-  Observer.supportsNativeFontLoading = function (context) {
-    if (Observer.SUPPORTS_NATIVE_FONT_LOADING === null) {
-      Observer.SUPPORTS_NATIVE_FONT_LOADING = !!context.document['fonts'];
+  static supportsNativeFontLoading = function (context) {
+    if (FontFaceObserver.SUPPORTS_NATIVE_FONT_LOADING === null) {
+      FontFaceObserver.SUPPORTS_NATIVE_FONT_LOADING =
+        !!context.document['fonts'];
     }
-    return Observer.SUPPORTS_NATIVE_FONT_LOADING;
+    return FontFaceObserver.SUPPORTS_NATIVE_FONT_LOADING;
   };
 
   /**
@@ -151,17 +143,17 @@ goog.scope(function () {
    *
    * @return {boolean}
    */
-  Observer.supportStretch = function () {
-    if (Observer.SUPPORTS_STRETCH === null) {
+  static supportStretch = function () {
+    if (FontFaceObserver.SUPPORTS_STRETCH === null) {
       var div = dom.createElement('div');
 
       try {
         div.style.font = 'condensed 100px sans-serif';
       } catch (e) {}
-      Observer.SUPPORTS_STRETCH = (div.style.font !== '');
+      FontFaceObserver.SUPPORTS_STRETCH = div.style.font !== '';
     }
 
-    return Observer.SUPPORTS_STRETCH;
+    return FontFaceObserver.SUPPORTS_STRETCH;
   };
 
   /**
@@ -170,33 +162,42 @@ goog.scope(function () {
    * @param {string} family
    * @return {string}
    */
-  Observer.prototype.getStyle = function (family) {
-    return [this['style'], this['weight'], Observer.supportStretch() ? this['stretch'] : '', '100px', family].join(' ');
-  };
+  getStyle(family) {
+    return [
+      this['style'],
+      this['weight'],
+      FontFaceObserver.supportStretch() ? this['stretch'] : '',
+      '100px',
+      family,
+    ].join(' ');
+  }
 
   /**
    * Returns the current time in milliseconds
    *
    * @return {number}
    */
-  Observer.prototype.getTime = function () {
+  getTime() {
     return new Date().getTime();
-  };
+  }
 
   /**
    * @param {string=} text Optional test string to use for detecting if a font is available.
    * @param {number=} timeout Optional timeout for giving up on font load detection and rejecting the promise (defaults to 3 seconds).
-   * @return {Promise.<fontface.Observer>}
+   * @return {Promise.<fontface.FontFaceObserver.}
    */
-  Observer.prototype.load = function (text, timeout) {
+  load(text, timeout) {
     var that = this;
     var testString = text || 'BESbswy';
     var timeoutId = 0;
-    var timeoutValue = timeout || Observer.DEFAULT_TIMEOUT;
+    var timeoutValue = timeout || FontFaceObserver.DEFAULT_TIMEOUT;
     var start = that.getTime();
 
     return new Promise(function (resolve, reject) {
-      if (Observer.supportsNativeFontLoading(that['context']) && !Observer.hasSafari10Bug(that['context'])) {
+      if (
+        FontFaceObserver.supportsNativeFontLoading(that['context']) &&
+        !FontFaceObserver.hasSafari10Bug(that['context'])
+      ) {
         var loader = new Promise(function (resolve, reject) {
           var check = function () {
             var now = that.getTime();
@@ -204,23 +205,24 @@ goog.scope(function () {
             if (now - start >= timeoutValue) {
               reject(new Error('' + timeoutValue + 'ms timeout exceeded'));
             } else {
-              that['context'].document.fonts.load(that.getStyle('"' + that['family'] + '"'), testString).then(function (fonts) {
-                if (fonts.length >= 1) {
-                  resolve();
-                } else {
-                  setTimeout(check, 25);
-                }
-              }, reject);
+              that['context'].document.fonts
+                .load(that.getStyle('"' + that['family'] + '"'), testString)
+                .then(function (fonts) {
+                  if (fonts.length >= 1) {
+                    resolve();
+                  } else {
+                    setTimeout(check, 25);
+                  }
+                }, reject);
             }
           };
           check();
         });
 
         var timer = new Promise(function (resolve, reject) {
-          timeoutId = setTimeout(
-            function() { reject(new Error('' + timeoutValue + 'ms timeout exceeded')); },
-            timeoutValue
-          );
+          timeoutId = setTimeout(function () {
+            reject(new Error('' + timeoutValue + 'ms timeout exceeded'));
+          }, timeoutValue);
         });
 
         Promise.race([timer, loader]).then(function () {
@@ -268,17 +270,29 @@ goog.scope(function () {
            *    continue waiting until we get new values (or a timeout).
            */
           function check() {
-            if ((widthA != -1 && widthB != -1) || (widthA != -1 && widthC != -1) || (widthB != -1 && widthC != -1)) {
+            if (
+              (widthA != -1 && widthB != -1) ||
+              (widthA != -1 && widthC != -1) ||
+              (widthB != -1 && widthC != -1)
+            ) {
               if (widthA == widthB || widthA == widthC || widthB == widthC) {
                 // All values are the same, so the browser has most likely loaded the web font
 
-                if (Observer.hasWebKitFallbackBug()) {
+                if (FontFaceObserver.hasWebKitFallbackBug()) {
                   // Except if the browser has the WebKit fallback bug, in which case we check to see if all
                   // values are set to one of the last resort fonts.
 
-                  if (((widthA == fallbackWidthA && widthB == fallbackWidthA && widthC == fallbackWidthA) ||
-                        (widthA == fallbackWidthB && widthB == fallbackWidthB && widthC == fallbackWidthB) ||
-                        (widthA == fallbackWidthC && widthB == fallbackWidthC && widthC == fallbackWidthC))) {
+                  if (
+                    (widthA == fallbackWidthA &&
+                      widthB == fallbackWidthA &&
+                      widthC == fallbackWidthA) ||
+                    (widthA == fallbackWidthB &&
+                      widthB == fallbackWidthB &&
+                      widthC == fallbackWidthB) ||
+                    (widthA == fallbackWidthC &&
+                      widthB == fallbackWidthC &&
+                      widthC == fallbackWidthC)
+                  ) {
                     // The width we got matches some of the known last resort fonts, so let's assume we're dealing with the last resort font.
                     return;
                   }
@@ -327,7 +341,6 @@ goog.scope(function () {
 
           checkForTimeout();
 
-
           rulerA.onResize(function (width) {
             widthA = width;
             check();
@@ -351,5 +364,5 @@ goog.scope(function () {
         });
       }
     });
-  };
-});
+  }
+}
