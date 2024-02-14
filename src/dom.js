@@ -1,3 +1,7 @@
+export function addListener(element, event, listener) {
+  element.addEventListener(event, listener);
+}
+
 export function append(parent, child) {
   parent.appendChild(child);
 }
