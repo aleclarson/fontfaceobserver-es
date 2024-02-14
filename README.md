@@ -1,3 +1,9 @@
+# @alloc/fontfaceobserver-es
+
+An up-to-date fork of `fontfaceobserver` that has been converted to ESM format and has TypeScript types included.
+
+---
+
 # Font Face Observer [![Build Status](https://travis-ci.org/bramstein/fontfaceobserver.png?branch=master)](https://travis-ci.org/bramstein/fontfaceobserver)
 
 Font Face Observer is a small `@font-face` loader and monitor (3.5KB minified and 1.3KB gzipped) compatible with any webfont service. It will monitor when a webfont is loaded and notify you. It does not limit you in any way in where, when, or how you load your webfonts. Unlike the [Web Font Loader](https://github.com/typekit/webfontloader) Font Face Observer uses scroll events to detect font loads efficiently and with minimum overhead.
