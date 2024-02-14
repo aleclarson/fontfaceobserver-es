@@ -1,3 +1,4 @@
+import * as dom from './dom';
 import { Ruler } from './ruler';
 
 export class FontFaceObserver {

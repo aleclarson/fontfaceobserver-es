@@ -1,3 +1,5 @@
+import * as dom from './dom';
+
 export class Ruler {
   constructor(text) {
     var style =
